@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>index</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #e8d7d5;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 20px;
+      width: 100%;
+      height: 100%;
+      max-width: 400px;
+      text-align: center;
+      background-color: #e8d7d5;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #bff0ff, #8fcdf4);
+      height: 40px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    .user-icon {
+      float: right;
+      margin-right: 10px;
+      font-size: 1.5rem;
+      padding: 3px;
+    }
+
+    .balance {
+      padding: 10px;
+      float: left;
+      padding-left: 30px;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .fand {
+      font-size: 20px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 10px;
+      float: left;
+      color: #114cee;
+      padding-left: 80px;
+    }
+
+    .circle-grid {
+      background-color: #dec1e0;
+      padding: 10px;
+      border-radius: 15px;
+      display: grid;
+      grid-template-rows: repeat(2, auto);
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      grid-gap: 5px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+
+    .red {
+      background-color: red;
+      color: #ffffff;
+    }
+
+    .green {
+      background-color: green;
+      color: #ffffff;
+    }
+
+    .blue {
+      background-color: blue;
+      color: #ffffff;
+    }
+
+    .color-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .color-buttons div {
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
+    }
+
+    .red-btn {
+      background-color: red;
+    }
+
+    .green-btn {
+      background-color: green;
+    }
+
+    .blue-btn {
+      background-color: blue;
+    }
+
+    #timer {
+      font-size: 2.5rem;
+      padding: 20px;
+      border: 2px solid black;
+      border-radius: 10px;
+      margin: 20px auto;
+      color: #ffffff;
+      transition: background-color 0.3s;
+      width: 80%;
+      background-color: #ffaeae;
+    }
+
+    .resulthed {
+      text-align: center;
+      padding: 2vh 10vw;
+    }
+
+    table {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      overflow-x: auto;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 12px 8px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: center;
+      position: fixed;
+      width: 100%;
+      align-items: center;
+      bottom: 0;
+      left: 0;
+      padding: 10px;
+    }
+
+    .footer button {
+      width: 45%;
+      padding: 20px 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+
+    .all-history {
+      background-color: #debc5d;
+    }
+
+    .withdraw {
+      background-color: #d3a4eb;
+    }
+
+    @media (min-width: 768px) {
+      .footer button {
+        width: 30%;
+        padding: 15px 10px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <span class="balance">Balance: ₹1000</span>
+      <a class="fand" href="add.html">Add fand</a>
+      <span class="user-icon"><a href="profile.html">👤</a></span>
+    </div>
+
+    <div class="circle-grid">
+      <center><div class="circle blue">1</div></center>
+      <center><div class="circle blue">6</div></center>
+      <center><div class="circle red">2</div></center>
+      <center><div class="circle green">7</div></center>
+      <center><div class="circle green">3</div></center>
+      <center><div class="circle red">8</div></center>
+      <center><div class="circle red">4</div></center>
+      <center><div class="circle green">9</div></center>
+      <center><div class="circle green">5</div></center>
+      <center><div class="circle red">10</div></center>
+    </div>
+
+    <div class="color-buttons">
+      <div class="red-btn"></div>
+      <div class="green-btn"></div>
+      <div class="blue-btn"></div>
+    </div>
+
+    <div id="timer">02:00</div>
+
+    <center>
+      <table>
+        <thead>
+          <tr>
+            <th>Picked At</th>
+            <th>Object Number</th>
+            <th>Color</th>
+          </tr>
+        </thead>
+        <tbody id="results-table">
+          <!-- Data will be inserted here -->
+        </tbody>
+      </table>
+    </center>
+
+    <div class="footer">
+      <button class="all-history" onclick="location.href='result.html'">All History</button>
+      <button class="withdraw">Withdraw</button>
+    </div>
+  </div>
+
+  <script>
+    // Check for token on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('You are not logged in');
+        window.location.href = 'login.html';
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('token');  // Remove JWT token
+      alert('Logged out');
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <script>
+    const timerElement = document.getElementById('timer');
+    const socket = io();
+
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+      const seconds = String(totalSeconds % 60).padStart(2, '0');
+      return `${minutes}:${seconds}`;
+    }
+
+    socket.on('updateTimer', (remainingTime) => {
+      timerElement.textContent = formatTime(remainingTime);
+    });
+
+    // Verify connection
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    socket.on('disconnect', () => {
+      console.error('Disconnected from server');
+    });
+
+    // Listen for the test event to confirm connectivity
+    socket.on('testEvent', (data) => {
+      console.log('Received from server:', data.message);
+    });
+
+    // Listen for log updates and display only the 10 most recent entries in descending order
+    socket.on('updateLogs', (data) => {
+      const tableBody = document.getElementById('results-table');
+      tableBody.innerHTML = ''; // Clear the table before adding new data
+
+      // Sort data by 'picked_at' in descending order
+      const sortedLogs = data.sort((a, b) => new Date(b.picked_at) - new Date(a.picked_at));
+      
+      // Take only the 10 most recent entries
+      const recentLogs = sortedLogs.slice(0, 10);
+
+      recentLogs.forEach(log => {
+        const date = new Date(log.picked_at);
+        const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${formattedDate}</td>
+          <td>${log.object_number}</td>
+          <td>${log.color}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    });
+  </script>
+</body>
+</html>

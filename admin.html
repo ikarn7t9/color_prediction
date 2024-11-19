@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .box {
+            width: 50px;
+            height: 30px;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+
+        .blue {
+            background-color: blue;
+            color: white;
+        }
+
+        .red {
+            background-color: red;
+            color: white;
+        }
+
+        .green {
+            background-color: green;
+            color: white;
+        }
+
+        .submit-button {
+            margin: 20px;
+            padding: 10px;
+            background-color: #D8BFD8;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+
+        #timer {
+            font-size: 24px;
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Admin Panel</h1>
+    <div id="timer">Time remaining: 00:00</div> <!-- Countdown timer display -->
+
+    <div class="container">
+        <div class="box blue" data-number="1" data-color="blue">1</div>
+        <div class="box red" data-number="2" data-color="red">2</div>
+        <div class="box green" data-number="3" data-color="green">3</div>
+        <div class="box red" data-number="4" data-color="red">4</div>
+        <div class="box green" data-number="5" data-color="green">5</div>
+        <div class="box blue" data-number="6" data-color="blue">6</div>
+        <div class="box green" data-number="7" data-color="green">7</div>
+        <div class="box red" data-number="8" data-color="red">8</div>
+        <div class="box green" data-number="9" data-color="green">9</div>
+        <div class="box red" data-number="10" data-color="red">10</div>
+    </div>
+    <center>
+        <button class="submit-button">Submit</button>
+    </center>
+    <script src="/socket.io/socket.io.js"></script> <!-- Add this to use Socket.io -->
+    <script>
+        let selectedObject = null;
+        const timerDisplay = document.getElementById('timer');
+
+        document.querySelectorAll('.box').forEach(box => {
+            box.addEventListener('click', () => {
+                // Deselect all boxes
+                document.querySelectorAll('.box').forEach(b => b.style.border = '1px solid black');
+                // Highlight the selected box
+                box.style.border = '3px solid yellow';
+                // Store the selected object info
+                selectedObject = {
+                    number: box.getAttribute('data-number'),
+                    color: box.getAttribute('data-color')
+                };
+            });
+        });
+
+        document.querySelector('.submit-button').addEventListener('click', () => {
+            if (selectedObject) {
+                fetch('/admin/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(selectedObject)
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Selection submitted successfully!');
+                    } else {
+                        alert('Failed to submit selection.');
+                    }
+                });
+            } else {
+                alert('Please select an object first.');
+            }
+        });
+
+        // Establish a connection to the server using Socket.io
+        const socket = io();
+
+        // Listen for 'updateTimer' events from the server
+        socket.on('updateTimer', (remainingTime) => {
+            // Convert remainingTime from milliseconds to minutes and seconds
+            const minutes = Math.floor(remainingTime / 60000);
+            const seconds = Math.floor((remainingTime % 60000) / 1000);
+            // Update the timer display
+            timerDisplay.textContent = `Time remaining: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        });
+    </script>
+</body>
+
+</html>

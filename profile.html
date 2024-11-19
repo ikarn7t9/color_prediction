@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page</title>
+  <style>
+    /* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f3f3f3;
+  margin: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: linear-gradient(135deg, #7b2ff7, #f107a3);
+  height: 70vh;
+}
+
+.header {
+  /*background: linear-gradient(135deg, #7b2ff7, #f107a3);*/
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+.backkk{
+  text-decoration: none;
+  color: white;
+}
+.header h1 {
+  margin-top: 40px;
+}
+
+.profile-pic {
+  width: 90px;
+  height: 90px;
+  background-color: #fff;
+  border-radius: 50%;
+  margin: auto;
+  overflow: hidden;
+}
+.user-icon { 
+      font-size: 4.4rem;
+      
+    }
+
+.profile-details {
+  padding: 20px;
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.icon {
+  font-size: 18px;
+  color: #7b2ff7;
+  margin-right: 15px;
+}
+
+.profile-item span {
+  color: #333;
+  font-size: 16px;
+}
+
+.edit-button {
+  width: 20%;
+  /*background: linear-gradient(135deg, #7b2ff7, #f107a3);*/
+  color: #fff;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  background:green;
+  margin-top: 60px;
+}
+
+/* Responsive Styles */
+@media (min-width: 768px) {
+  .container {
+    max-width: 600px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .profile-item span {
+    font-size: 18px;
+  }
+
+  .edit-button {
+    font-size: 18px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="back-button"><a class="backkk" href="index.html">←</a></button>
+      <h1>Anna Avetisyan</h1>
+      <div class="profile-pic"><span class="user-icon">👤</span></div>
+    </div>
+    <div class="profile-details">
+      <div class="profile-item">
+        <i class="icon">👤</i>
+        <span>Anna Avetisyan</span>
+      </div>
+      <div class="profile-item">
+        <i class="icon">🎂</i>
+        <span>Birthday</span>
+      </div>
+      <div class="profile-item">
+        <i class="icon">📞</i>
+        <span>818 123 4567</span>
+      </div>
+      <div class="profile-item">
+        <i class="icon">📷</i>
+        <span>Instagram account</span>
+      </div>
+      <div class="profile-item">
+        <i class="icon">📧</i>
+        <span>info@aplusdesign.co</span>
+      </div>
+      <div class="profile-item">
+        <i class="icon">🔒</i>
+        <span>Password</span>
+      </div>
+    </div>
+    <center>
+    <button class="edit-button" onclick="logout()">Logout</button>
+</center>
+  </div>
+
+
+
+
+  
+  <script>
+      // Check for token on page load
+      document.addEventListener('DOMContentLoaded', () => {
+          const token = localStorage.getItem('token');
+          if (!token) {
+              alert('You are not logged in');
+              window.location.href = 'login.html';
+          }
+      });
+
+      function logout() {
+          localStorage.removeItem('token');  // Remove JWT token
+          alert('Logged out');
+          window.location.href = 'login.html';
+      }
+  </script>
+</body>
+</html>

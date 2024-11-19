@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Database Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .resulthed {
+            text-align: center;
+            padding: 2vh 10vw;
+        }
+
+        table {
+            width: 90%;
+            max-width: 1200px; /* Max width for larger screens */
+            margin: 0 auto;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px 8px;
+            text-align: center; /* Center text horizontally */
+            vertical-align: middle; /* Center text vertically */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <div class="resulthed">
+        <h2>Database Results</h2>
+    </div>
+    <center>
+        <table>
+            <thead>
+                <tr>
+                    <th>Picked At</th>
+                    <th>Object Number</th>
+                    <th>Color</th>
+                </tr>
+            </thead>
+            <tbody id="results-table">
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+    </center>
+    <script>
+        const socket = io();
+
+// Verify connection
+socket.on('connect', () => {
+    console.log('Connected to server');
+});
+
+socket.on('disconnect', () => {
+    console.error('Disconnected from server');
+});
+
+// Listen for the test event to confirm connectivity
+socket.on('testEvent', (data) => {
+    console.log('Received from server:', data.message);
+});
+
+
+        // Listen for log updates
+        socket.on('updateLogs', (data) => {
+            const tableBody = document.getElementById('results-table');
+            tableBody.innerHTML = ''; // Clear the table before adding new data
+
+            data.forEach(log => {
+                const date = new Date(log.picked_at);
+                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${log.object_number}</td>
+                    <td>${log.color}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        });
+    </script>
+</body>
+
+</html>

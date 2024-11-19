@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Funds</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px; /* Adds space at the top */
+    }
+    .container {
+        text-align: center;
+        width: 300px;
+        margin: 0 auto;
+        padding-top: 200px;
+    }
+    .preset-buttons {
+        display: flex;
+        justify-content: space-around;
+        background-color: #b6e356;
+        padding: 15px;
+        margin-bottom: 30px;
+        border-radius: 8px;
+    }
+    .preset-buttons button {
+        width: 70px;
+        height: 40px;
+        font-size: 18px;
+        background-color: white;
+        border: 1px solid black;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .input-container {
+        background-color: #99d4e6;
+        padding: 15px 30px;
+        border: 1px solid black;
+        margin-bottom: 30px;
+        border-radius: 8px;
+    }
+    .input-container label {
+        font-size: 20px;
+    }
+    .input-container input {
+        font-size: 20px;
+        width: 90px;
+        border: none;
+        text-align: center;
+    }
+    .add-button {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 20px;
+        padding: 12px 25px;
+        border: 1px solid black;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="preset-buttons">
+        <button onclick="setFund(100)">100</button>
+        <button onclick="setFund(500)">500</button>
+        <button onclick="setFund(1000)">1000</button>
+    </div>
+
+    <div class="input-container">
+        <label for="fund">Add fund ₹</label>
+        <input type="text" id="fund" value="100">
+    </div>
+
+    <button class="add-button" onclick="addFund()">Add</button>
+</div>
+
+
+
+
+<script>
+    // Check for token on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('You are not logged in');
+            window.location.href = 'login.html';
+        }
+    });
+
+    function logout() {
+        localStorage.removeItem('token');  // Remove JWT token
+        alert('Logged out');
+        window.location.href = 'login.html';
+    }
+</script>
+
+
+
+
+
+
+
+<script>
+    function setFund(amount) {
+        document.getElementById('fund').value = amount;
+    }
+
+    function addFund() {
+        const amount = document.getElementById('fund').value;
+
+        // Convert amount to a numeric format, removing any commas
+        const formattedAmount = parseFloat(amount);
+        
+        if (isNaN(formattedAmount) || formattedAmount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+        }
+
+        // UPI ID to which payment is to be made
+        const upiId = "polsksonowal613-1@okhdfcbank";
+        
+        // Create a UPI link
+        const upiLink = `upi://pay?pa=${upiId}&pn=Add%20Fund&am=${formattedAmount}&cu=INR`;
+
+        // Open UPI payment link
+        window.location.href = upiLink;
+    }
+</script>
+
+</body>
+</html>
